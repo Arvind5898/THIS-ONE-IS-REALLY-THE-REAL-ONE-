@@ -5,6 +5,8 @@
  */
 package assignment04;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Owner
@@ -16,6 +18,7 @@ public class Assignment04 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Scanner input = new Scanner (System.in);
     }
     
 }
