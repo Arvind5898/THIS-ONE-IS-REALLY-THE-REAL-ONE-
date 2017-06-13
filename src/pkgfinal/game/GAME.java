@@ -3,6 +3,7 @@ package pkgfinal.game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -35,14 +36,18 @@ public class GAME extends JComponent {
     boolean upPressed;
     // commanding player 1 to move down once the down key is pressed
     boolean downPressed;
-    // commanding player 2 to move right once the d key is pressed 
-    boolean dPressed;
-    // commanding player 2 to move left once the a key is pressed
-    boolean aPressed;
+    
+    
     // commanding player 2 to move up once the w key is pressed
     boolean wPressed;
     // commmanding player 2 to move up once the s key is pressed 
     boolean sPressed; 
+    // rotate left
+    boolean aPressed;
+    // rotate right 
+    boolean dPressed;
+    
+    int angle = 0;
     
     
     
@@ -96,25 +101,31 @@ public class GAME extends JComponent {
     // NOTE: This is already double buffered!(helps with framerate/speed)
     @Override
     public void paintComponent(Graphics g) {
+        
+        Graphics2D g2d = (Graphics2D) g;
         // GAME DRAWING GOES HERE
+       
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
+        
+        
 
         // drawing background and setting the color to black 
         g.setColor(Color.BLACK);
         // filling the background completely black
         g.fillRect(0, 0, 1000, 800);
         
-        
-        
-
-        // creating the dimensions for player one (spaceship)
         g.setColor(Color.red);
-        g.fillRect(player1.x, player1.y, player1.width, player1.height);
+        
+        
+        
+        
+        
+        
 
         // creating the dimensions for player two (UFO)
-        g.setColor(Color.green);
-        g.fillRect(player2.x, player2.y, player2.width, player2.height);
+        //g.setColor(Color.green);
+        //g.fillRect(player2.x, player2.y, player2.width, player2.height);
         
         // making the map 
         g.setColor(Color.WHITE);
@@ -129,11 +140,24 @@ public class GAME extends JComponent {
         for (int i = 0; i < blocks.length; i++){
             g.fillRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
         } 
+        
+        g2d.translate(player2.x + player2.y / 2, player2.width + player2.y / 2);
+        g2d.rotate(angle);
+        
+        // creating the dimensions for player one (spaceship)
+        
+        g.fillRect(-player2.width / 2, -player2.height / 2, player2.width, player2.height);
+//        g2d.fill3DRect(-player2.width / 2+ player2.x, -player2.height / 2 + player2.y, player2.width, player2.height, false);
+        
+//        g.fillRect( player2.x, player2.y -player2.height / 2, player2.width, player2.height);
+        
+        g2d.rotate(-angle);
+        g2d.translate(-player2.x - player2.y / 2, -player2.y - player2.y / 2);
 
         
         // GAME DRAWING ENDS HERE
 
-
+ 
 
 
         
@@ -188,43 +212,45 @@ public class GAME extends JComponent {
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
             collisions();
-            // if the d key is pressed, player 2 will move at a speed of +10  
-            if (dPressed) {
-                player2.x = player2.x + 10;
-            }
-            // if the a key is pressed, player 2 will move at a speed of -10
-            if (aPressed) {
-                player2.x = player2.x - 10;
-            }
-            // if the w key is pressed, player 2 will move up at a speed of -10
+          
+            // if the w key is pressed, player 2 will move up at a speed of -5
             if(wPressed){
-                player2.y = player2.y - 10;
+                player2.y = player2.y - 5;
+                System.out.println("test");
             }
-            // if the s key is pressed, player 2 will move down at a speed of +10 
+            // if the s key is pressed, player 2 will move down at a speed of +5 
             if(sPressed){
-                player2.y = player2.y + 10;
+                player2.y = player2.y + 5;
+            }
+            
+            if(aPressed) {
+                angle = angle + 5;               
+            }
+            
+            if(dPressed) {
+                angle = angle - 5;               
             }
             
             
             
-            // if the right key is pressed, player 1 will move at a speed of +10
-            if(rightPressed) {
-                player1.x = player1.x + 10;
-
-            }
-            // if the left key is pressed, player 1 will move at a speed of -10
-            if(leftPressed) {
-                player1.x = player1.x - 10;
-            }
-            // if the up key is pressed, player 1 will move up at a speed of -10
-            if(upPressed){
-                player1.y = player1.y - 10;
-         
-            }
-            // if the down key is pressed, player 1 will move down at a speed of =10
-            if(downPressed){
-                player1.y = player1.y + 10;
-            }
+//             if the right key is pressed, player 1 will move at a speed of +5
+//            if(rightPressed) {
+//                player1.x = player1.x + 5;
+//
+//            }
+//             if the left key is pressed, player 1 will move at a speed of -5
+//            if(leftPressed) {
+//                player1.x = player1.x - 5;
+//            }
+//             if the up key is pressed, player 1 will move up at a speed of -5
+//            if(upPressed){
+//                player1.y = player1.y - 5;
+//         
+//            }
+//             if the down key is pressed, player 1 will move down at a speed of +5
+//            if(downPressed){
+//                player1.y = player1.y + 5;
+//            }
 
             // GAME LOGIC ENDS HERE 
             // update the drawing (calls paintComponent)
@@ -294,12 +320,16 @@ public class GAME extends JComponent {
                 downPressed = true;
             }
             
+            
+            
+            
             // player 2
-            if (e.getKeyCode() == KeyEvent.VK_A) {
-                aPressed = true;
-            }
             if (e.getKeyCode() == KeyEvent.VK_D) {
                 dPressed = true;
+                
+            }
+            if (e.getKeyCode() == KeyEvent.VK_A) {
+                aPressed = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_W) {
                 wPressed = true;
@@ -326,7 +356,16 @@ public class GAME extends JComponent {
             }
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                 downPressed = false;
-            }    
+            }
+           
+            
+            
+            
+            
+            
+            
+            
+            
             if (e.getKeyCode() == KeyEvent.VK_A) {
                 aPressed = false;
             }
