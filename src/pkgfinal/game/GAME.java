@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -20,14 +22,14 @@ import java.awt.event.MouseWheelEvent;
 public class GAME extends JComponent {
 
     // Height and Width of our game
-    static final int WIDTH = 1000;
-    static final int HEIGHT = 800;
+    static final int WIDTH = 1275;
+    static final int HEIGHT = 950;
     //Title of the window
     String title = "My Game";
     // creating rectangle for player 1
-    Rectangle player1 = new Rectangle(500, 650, 30, 30);
+    Rectangle player1 = new Rectangle(WIDTH / 2 - 35, HEIGHT - 30, 70, 30);
     // creating rectangle for player 2 
-    Rectangle player2 = new Rectangle(500, 50, 30, 30);
+    Rectangle player2 = new Rectangle(WIDTH / 2 - 35, 0, 70, 30);
     // commanding player 1 to move right once the right key is pressed 
     boolean rightPressed;
     // comanding player 1 to move left once the left key is pressed 
@@ -36,38 +38,35 @@ public class GAME extends JComponent {
     boolean upPressed;
     // commanding player 1 to move down once the down key is pressed
     boolean downPressed;
-    
-    
-    // commanding player 2 to move up once the w key is pressed
+    // move up
     boolean wPressed;
-    // commmanding player 2 to move up once the s key is pressed 
-    boolean sPressed; 
-    // rotate left
+    // move down
+    boolean sPressed;
+    // move left 
     boolean aPressed;
-    // rotate right 
+    // move right 
     boolean dPressed;
-    
-    int angle = 0;
-    
-    
-    
-    
-    Rectangle[] blocks = new Rectangle[19];
-    
-    
-    
-    
-    
+    // rotate left
+    boolean vPressed;
+    // rotate right 
+    boolean bPressed;
+    // player 2 shoot
+    boolean spacePressed;
+    // player 1 shoot 
+    boolean mPressed;
+    Rectangle[] blocks = new Rectangle[6];
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
     long desiredFPS = 60;
     long desiredTime = (1000) / desiredFPS;
-
     // YOUR GAME VARIABLES WOULD GO HERE
-   
+    // shooting for platyer one 
+    ArrayList<Rectangle> bullet = new ArrayList();
+    Iterator<Rectangle> it = bullet.iterator();
+    // shooting for player 2
+    ArrayList<Rectangle> bullet2 = new ArrayList();
+    Iterator<Rectangle> it2 = bullet2.iterator();
 
-
-    
     // GAME VARIABLES END HERE   
     // Constructor to create the Frame and place the panel in
     // You will learn more about this in Grade 12 :)
@@ -101,95 +100,72 @@ public class GAME extends JComponent {
     // NOTE: This is already double buffered!(helps with framerate/speed)
     @Override
     public void paintComponent(Graphics g) {
-        
-        Graphics2D g2d = (Graphics2D) g;
+
+
         // GAME DRAWING GOES HERE
-       
+
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        
-        
 
         // drawing background and setting the color to black 
         g.setColor(Color.BLACK);
         // filling the background completely black
-        g.fillRect(0, 0, 1000, 800);
-        
+        g.fillRect(0, 0, 1275, 950);
+
+        // line dividing the map 
         g.setColor(Color.red);
-        
-        
-        
-        
-        
-        
-
-        // creating the dimensions for player two (UFO)
-        //g.setColor(Color.green);
-        //g.fillRect(player2.x, player2.y, player2.width, player2.height);
-        
-        // making the map 
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 1000, 8);
-        
-        
-        g.fillRect(300, 200, 200, 8);
-        
-        
-        
-        
-        for (int i = 0; i < blocks.length; i++){
-            g.fillRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
-        } 
-        
-        g2d.translate(player2.x + player2.y / 2, player2.width + player2.y / 2);
-        g2d.rotate(angle);
-        
-        // creating the dimensions for player one (spaceship)
-        
-        g.fillRect(-player2.width / 2, -player2.height / 2, player2.width, player2.height);
-//        g2d.fill3DRect(-player2.width / 2+ player2.x, -player2.height / 2 + player2.y, player2.width, player2.height, false);
-        
-//        g.fillRect( player2.x, player2.y -player2.height / 2, player2.width, player2.height);
-        
-        g2d.rotate(-angle);
-        g2d.translate(-player2.x - player2.y / 2, -player2.y - player2.y / 2);
-
-        
-        // GAME DRAWING ENDS HERE
-
- 
+        g.fillRect(0, HEIGHT / 2, 1275, 5);
 
 
-        
+
+        for (int i = 0; i < blocks.length; i++) {
+            if (blocks[i] != null) {
+                g.fillRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
+            }
+        }
+
+        // drawing player one 
+        g.drawRect(player1.x, player1.y, player1.width, player1.height);
+        // drawing player two 
+        g.drawRect(player2.x, player2.y, player2.width, player2.height);
+
+        for (Rectangle bullets : bullet) {
+            g.fillRect(bullets.x, bullets.y, bullets.width, bullets.height);
+        }
+        for (Rectangle bullets2 : bullet2) {
+            g.fillRect(bullets2.x, bullets2.y, bullets2.width, bullets2.height);
+        }
+
+        // top screen sheilds
+        blocks[0] = new Rectangle(WIDTH - 350, HEIGHT / 5, 150, 30);
+        blocks[1] = new Rectangle(WIDTH - 700, HEIGHT / 5, 150, 30);
+        blocks[2] = new Rectangle(WIDTH - 1050, HEIGHT / 5, 150, 30);
+        // bottom screen sheilds 
+        blocks[3] = new Rectangle(WIDTH / 2, HEIGHT / 5, 150, 30);
+        blocks[4] = new Rectangle(WIDTH / 2, HEIGHT / 5, 150, 30);
+        blocks[5] = new Rectangle(WIDTH / 2, HEIGHT / 5, 150, 30);
+
+        g.setColor(Color.white);
+        //bullet for player 1
+        for (Rectangle bullets : bullet) {
+            g.drawRect(bullets.x, bullets.y, bullets.width, bullets.height);
+        }
+
+
+
+
+
+
     }
 
     // This method is used to do any pre-setup you might need to do
     // This is run before the game loop begins!
     public void preSetup() {
         // Any of your pre setup before the loop starts should go here
-        // boundaries start here 
-        blocks[0] = new Rectangle(700, 500, 300, 8);
-        blocks[1] = new Rectangle(0,795,1000,8);
-        blocks[2] = new Rectangle(0,0,8,800);
-        blocks[3] = new Rectangle(0,0,8,800);
-        //boundaries end here
-        blocks[4] = new Rectangle(400, 0, 8, 200);
-        blocks[5] = new Rectangle(200, 200, 400, 8);
-        blocks[6] = new Rectangle(200,100,8,100);
-        blocks[7] = new Rectangle(300,200,8,100);
-        blocks[8] = new Rectangle();
-        blocks[9] = new Rectangle();
-        blocks[10] = new Rectangle();
-        blocks[11] = new Rectangle();
-        blocks[12] = new Rectangle();
-        blocks[13] = new Rectangle();
-        blocks[14] = new Rectangle();
-        blocks[15] = new Rectangle();
-        blocks[16] = new Rectangle();
-        blocks[17] = new Rectangle();
-        blocks[18] = new Rectangle();
-        
-//        blocks[1] = new Rectangle();
+    
+
+
+
     }
 
     // The main game loop
@@ -211,46 +187,89 @@ public class GAME extends JComponent {
 
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
-            collisions();
-          
-            // if the w key is pressed, player 2 will move up at a speed of -5
-            if(wPressed){
-                player2.y = player2.y - 5;
-                System.out.println("test");
+            //ask if bullet intersect player
+            for (int i = 0; i < bullet.size(); i++) {
+                bulletCollisions(i);
+
             }
-            // if the s key is pressed, player 2 will move down at a speed of +5 
-            if(sPressed){
-                player2.y = player2.y + 5;
+
+
+
+
+
+
+
+
+
+            if (aPressed) {
+                player2.x = player2.x - 10;
+
+            }
+            //if the left key is pressed, player 1 will move at a speed of +10
+            if (dPressed) {
+                player2.x = player2.x + 10;
+            }
+            //if the up key is pressed, player 1 will move up at a speed of -10
+            if (wPressed) {
+                player2.y = player2.y - 10;
+
+            }
+            // if the down key is pressed, player 1 will move down at a speed of +10
+            if (sPressed) {
+                player2.y = player2.y + 10;
+            }
+
+            //if the right key is pressed, player 1 will move at a speed of +10
+            if (rightPressed) {
+                player1.x = player1.x + 10;
+
+            }
+            //if the left key is pressed, player 1 will move at a speed of -10
+            if (leftPressed) {
+                player1.x = player1.x - 10;
+            }
+            //if the up key is pressed, player 1 will move up at a speed of -10
+            if (upPressed) {
+                player1.y = player1.y - 10;
+
+            }
+            // if the down key is pressed, player 1 will move down at a speed of +10
+            if (downPressed) {
+                player1.y = player1.y + 10;
+            }
+
+            if (spacePressed) {
+            }
+
+
+
+
+            if (mPressed) {
+
+                bullet.add(new Rectangle(player1.x, player1.y-50, 20, 20));
+
+
+                mPressed = false;
+
+
+            }
+            if (spacePressed){
+                
+                bullet2.add(new Rectangle(player2.x, player2.y + 50, 20, 20));
+                
+                spacePressed = false;
             }
             
-            if(aPressed) {
-                angle = angle + 5;               
+            for (Rectangle bullets : bullet) {
+                bullets.y -= 5;
             }
-            
-            if(dPressed) {
-                angle = angle - 5;               
+            for (Rectangle bullets : bullet2){
+                bullets.y += 5;
             }
-            
-            
-            
-//             if the right key is pressed, player 1 will move at a speed of +5
-//            if(rightPressed) {
-//                player1.x = player1.x + 5;
-//
-//            }
-//             if the left key is pressed, player 1 will move at a speed of -5
-//            if(leftPressed) {
-//                player1.x = player1.x - 5;
-//            }
-//             if the up key is pressed, player 1 will move up at a speed of -5
-//            if(upPressed){
-//                player1.y = player1.y - 5;
-//         
-//            }
-//             if the down key is pressed, player 1 will move down at a speed of +5
-//            if(downPressed){
-//                player1.y = player1.y + 5;
-//            }
+
+            shooting();
+
+
 
             // GAME LOGIC ENDS HERE 
             // update the drawing (calls paintComponent)
@@ -302,7 +321,7 @@ public class GAME extends JComponent {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            
+
             // player 1
 
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -319,14 +338,18 @@ public class GAME extends JComponent {
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                 downPressed = true;
             }
-            
-            
-            
-            
+            // key pressed for shooting 
+            if (e.getKeyCode() == KeyEvent.VK_M) {
+                mPressed = true;
+            }
+
+
+
+
             // player 2
             if (e.getKeyCode() == KeyEvent.VK_D) {
                 dPressed = true;
-                
+
             }
             if (e.getKeyCode() == KeyEvent.VK_A) {
                 aPressed = true;
@@ -336,7 +359,11 @@ public class GAME extends JComponent {
             }
             if (e.getKeyCode() == KeyEvent.VK_S) {
                 sPressed = true;
-            }    
+            }
+            // key preesed for shooting 
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                spacePressed = true;
+            }
 
 
         }
@@ -357,27 +384,33 @@ public class GAME extends JComponent {
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                 downPressed = false;
             }
-           
-            
-            
-            
-            
-            
-            
-            
-            
-            if (e.getKeyCode() == KeyEvent.VK_A) {
-                aPressed = false;
+            // key released for shooting 
+            if (e.getKeyCode() == KeyEvent.VK_M) {
+                mPressed = false;
             }
+
+
+
+
+
+
+
             if (e.getKeyCode() == KeyEvent.VK_D) {
                 dPressed = false;
+            }
+            if (e.getKeyCode() == KeyEvent.VK_A) {
+                aPressed = false;
             }
             if (e.getKeyCode() == KeyEvent.VK_W) {
                 wPressed = false;
             }
             if (e.getKeyCode() == KeyEvent.VK_S) {
                 sPressed = false;
-            }    
+            }
+            // key released for shooting 
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                spacePressed = false;
+            }
 
 
 
@@ -400,33 +433,51 @@ public class GAME extends JComponent {
             player1.x = 0;
         }
 
-        if (player1.x >= 970) {
-            player1.x = 970;
+        if (player1.x >= 1205) {
+            player1.x = 1205;
         }
-        
-        if (player1.y <= 0){
+
+        if (player1.y <= 0) {
             player1.y = 0;
         }
-        
-        if (player1.y >= 770){
-            player1.y = 770;
+
+        if (player1.y >= 920) {
+            player1.y = 920;
         }
 
         if (player2.x <= 0) {
             player2.x = 0;
-            
-        }
-        
-        if (player2.x >= 970) {
-            player2.x = 970;
-        }
-        
-        if (player2.y <= 0){
-            player2.y = 0;
-        }
-        if (player2.y >= 770){
-            player2.y = 770;
+
         }
 
+        if (player2.x >= 1205) {
+            player2.x = 1205;
+        }
+
+        if (player2.y <= 0) {
+            player2.y = 0;
+        }
+        if (player2.y >= 920) {
+            player2.y = 920;
+        }
+
+    
+
+
+
+
+    }
+
+    public void bulletCollisions(int number) {
+        if (player1.intersects(bullet.get(number))) {
+
+            bullet.remove(bullet.get(number));
+        }
+    }
+
+     
+
+
+    public void shooting() {
     }
 }
