@@ -68,13 +68,6 @@ public class FINALGAME extends JComponent {
     
     Rectangle divider = new Rectangle(0, HEIGHT / 2, 1275, 5);
     
-//    Rectangle shield1 = new Rectangle(WIDTH - 350, 230, 150, 30);
-//    Rectangle shield2 = new Rectangle(WIDTH - 700, 230, 150, 30);
-//    Rectangle shield3 = new Rectangle(WIDTH - 1050, 230, 150, 30);
-//    
-//    Rectangle shield4 = new Rectangle(WIDTH - 350, 720, 150, 30);
-//    Rectangle shield5 = new Rectangle(WIDTH - 700, 720, 150, 30);
-//    Rectangle shield6 = new Rectangle(WIDTH - 1050, 720, 150, 30);
     
     
     // creation of array list for player 1
@@ -173,7 +166,7 @@ public class FINALGAME extends JComponent {
         blocks[5] = new Rectangle(WIDTH - 1050, 720, 150, 30);
 
         g.setColor(Color.white);
-        //bullet for player 1
+        //bullet for player 1 allowing it to be outlined in white 
         for (Rectangle bullets : bullet) {
             g.drawRect(bullets.x, bullets.y, bullets.width, bullets.height);
         }
@@ -501,18 +494,13 @@ public class FINALGAME extends JComponent {
         if (player1.intersects(bullet.get(number))) {
 
             bullet.remove(bullet.get(number));
+            
         }
         
-        for(int i= 0; 1 < blocks.length; i++){
-            for (int a= 0; a < bullet.size(); a++){
-                
-                if (blocks[i].intersects(bullet.get(a))){
-                    
-                    bullet.remove(a);
-                }
-            }
-        }
+        
+       
     }
+    
     
     
 
@@ -536,7 +524,9 @@ public class FINALGAME extends JComponent {
                 player1Score ++;
                 bullet2.remove(i);
             }
+            
         }
+        
         
 //        
 //            
