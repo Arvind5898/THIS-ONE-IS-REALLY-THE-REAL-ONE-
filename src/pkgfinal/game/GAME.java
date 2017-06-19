@@ -182,7 +182,7 @@ public class GAME extends JComponent {
     // This method is used to do any pre-setup you might need to do
     // This is run before the game loop begins!
     public void preSetup() {
-        // Any of your pre setup before the loop starts should go here
+        System.out.println("Special thanks to Maloof for literally everything LMAO JK but he nice");
     }
 
     // The main game loop
