@@ -216,11 +216,7 @@ public class FINALGAME extends JComponent {
             
             // calling the collisions
             collisions();
-            //ask if bullet intersect player
-            //for (int i = 0; i < bullet.size(); i++) {
-              //  bulletCollisions(i);
-
-           // }
+            bulletCollisions();
 
             if (sPressed) {
                 player2.x = player2.x - 10;
@@ -490,15 +486,31 @@ public class FINALGAME extends JComponent {
         
     }
     
-    public void bulletCollisions(int number) {
-        if (player1.intersects(bullet.get(number))) {
+    public void bulletCollisions() {
+        // when a bullet impacts a wall it is removed
+        for (int i = 0; i < blocks.length; i++) {
+            for (int a = 0; a < bullet.size(); a++) {
 
-            bullet.remove(bullet.get(number));
-            
+                if (blocks[i].intersects(bullet.get(a))) {
+
+                    bullet.remove(a);
+                }
+
+            }
+
         }
         
-        
-       
+        for (int i = 0; i < blocks.length; i++) {
+            for (int a = 0; a < bullet2.size(); a++) {
+
+                if (blocks[i].intersects(bullet2.get(a))) {
+
+                    bullet2.remove(a);
+                }
+
+            }
+
+        }
     }
     
     
