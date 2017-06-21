@@ -29,7 +29,7 @@ public class GAME extends JComponent {
     static final int WIDTH = 1275;
     static final int HEIGHT = 950;
     //Title of the window
-    String title = "My Game";
+    String title = "Arvinds Game // Powered by Maloof";
     // creating rectangle for player 1
     Rectangle player1 = new Rectangle(WIDTH / 2 - 35, HEIGHT - 30, 90, 90);
     // creating rectangle for player 2 
@@ -80,6 +80,8 @@ public class GAME extends JComponent {
     
     BufferedImage space = loadImage("space.jpeg");
     BufferedImage spaceship = loadImage("spaceship.png");
+    BufferedImage ufo = loadImage("ufo.png");
+    
 
     // GAME VARIABLES END HERE   
     // Constructor to create the Frame and place the panel in
@@ -136,7 +138,7 @@ public class GAME extends JComponent {
 //        g.drawRect(player1.x, player1.y, player1.width, player1.height);
         g.drawImage(spaceship, player1.x, player1.y, player1.width, player1.height, this);
         // drawing player two 
-        g.drawRect(player2.x, player2.y, player2.width, player2.height);
+        g.drawImage(ufo, player2.x, player2.y, 120,35,this);
 
         for (Rectangle bullets : bullet) {
             g.fillRect(bullets.x, bullets.y, bullets.width, bullets.height);
@@ -260,7 +262,7 @@ public class GAME extends JComponent {
             }
             if (qPressed) {
 
-                bullet2.add(new Rectangle(player2.x, player2.y + 20, 20, 20));
+                bullet2.add(new Rectangle(player2.x + 40, player2.y + 70, 20, 20));
 
                 qPressed = false;
             }
